@@ -1,0 +1,23 @@
+# A sample main function containing basic operations
+main()->void
+{
+    let i be 5;
+    let name be "David";
+    let run be true;
+
+    if run is true then print(i);
+    elif run is false and (name is "") then throw("Invalid Evaluation")
+    else print(name);
+}
+
+##########   SYNTAX   ##########
+# let:      let {identifier} be {value};
+# if:       if ({expression} is {boolean}) then expression;
+# elif:     elif {expression} is {boolean} then expression;
+# else:     else expression;
+# print     print({value});
+
+
+##########   NOTES   ##########
+# 'then' keyword may be on a new line or not
+# expressions may be in parentheses or not
