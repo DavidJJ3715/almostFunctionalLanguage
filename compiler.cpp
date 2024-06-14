@@ -3,17 +3,87 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <map>
+#include <tuple>
+#include <utility>
 
-std::vector<std::string> tokenize(std::string input)
+enum tokens
 {
-    std::vector<std::string> tokenList;
-    for(size_t i=0; i < input.size(); ++i)
+    token_whitespace,
+    token_let,
+    token_be,
+    token_if,
+    token_elif,
+    token_else,
+    token_then,
+    token_main,
+    token_void,
+    token_leftParentheses,
+    token_rightParentheses,
+    token_hash,
+    token_print,
+    token_throw,
+    token_semicolon,
+    token_arrow,
+    token_leftBrace,
+    token_rightBrace,
+    token_identifier,
+    token_endLine,
+};
+
+std::map<std::string,tokens> match = 
+{
+    {"let", token_let},
+    {"be", token_be},
+    {"if", token_if},
+    {"elif", token_elif},
+    {"else", token_else},
+    {"then", token_then},
+    {"main", token_main},
+    {"void", token_void},
+    {"(", token_leftParentheses},
+    {")", token_rightParentheses},
+    {"{", token_leftBrace},
+    {"}", token_rightBrace},
+    {"#", token_hash},
+    {"print", token_print},
+    {"throw", token_throw},
+    {";", token_semicolon},
+    {"->", token_arrow},
+};
+
+std::pair<std::vector<tokens>,std::vector<std::string>> tokenize(std::string input)
+{
+    std::vector<tokens> tokenList;
+    std::vector<std::string> varList;
+    std::string buffer;
+
+    std::string::iterator it = input.begin();
+    while(it != input.end())
     {
-        if(input.at(i) == ' ') {}
-        else if(input.at(i) == '\n') {}
-        else {std::cout << input[i];}
+        if(*it == '#')
+            {while(*it != '\n' && it != input.end()) {++it;}}
+        else if(*it != ' ' && *it != ';' && *it != '\n')
+            {buffer.push_back(*it); ++it;}
+        else
+        {
+            if(!buffer.empty())
+            {
+                auto it = match.find(buffer);
+                if(it == match.end())
+                {
+                    tokenList.push_back(token_identifier);
+                    varList.push_back(buffer);
+                }
+                else
+                    {tokenList.push_back(match[buffer]);}
+                buffer.clear();
+            }
+            if(*it == ';') {tokenList.push_back(token_semicolon);}
+            ++it;
+        }
     }
-    return tokenList;
+    return std::make_pair(tokenList,varList);
 }
 
 int main(int argc, char *argv[])
@@ -30,7 +100,9 @@ int main(int argc, char *argv[])
     std::string input = buffer.str();
     file.close();
 
-    std::vector<std::string> tokenList = tokenize(input);
-
+    auto [tokenList,varList] = tokenize(input);
+    std::cout << tokenList.size() << " " << varList.size();
+    for(auto it : varList)
+        {std::cout << it << " ";}
     return 0;
 }

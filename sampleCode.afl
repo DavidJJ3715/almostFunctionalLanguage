@@ -1,5 +1,5 @@
 # A sample main function containing basic operations
-main()->void
+main -> void
 {
     let i be 5;
     let name be "David";
