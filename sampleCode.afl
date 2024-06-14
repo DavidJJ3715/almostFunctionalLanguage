@@ -15,7 +15,8 @@ main -> void
 # if:       if ({expression} is {boolean}) then expression;
 # elif:     elif {expression} is {boolean} then expression;
 # else:     else expression;
-# print     print({value});
+# print:    print({value});
+# throw:    throw("Issue");
 
 
 ##########   NOTES   ##########
